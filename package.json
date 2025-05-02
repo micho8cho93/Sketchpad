@@ -1,0 +1,23 @@
+{
+  "name": "sketchpad",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micho8cho93/Sketchpad.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/micho8cho93/Sketchpad/issues"
+  },
+  "homepage": "https://github.com/micho8cho93/Sketchpad#readme",
+  "description": "",
+  "dependencies": {
+    "bulma": "^1.0.4"
+  }
+}

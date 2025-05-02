@@ -1,0 +1,38 @@
+@import 'node_modules/bulma/css/bulma.min.css';
+
+
+body {
+    min-height: 100vh;
+    min-width: 100vw;
+    color: black;
+}
+
+.title {
+    border: 2px solid black;
+    color: black;
+    text-align: center;
+    min-height: 10vh;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.sidebar {
+    border: 2px solid black;
+    min-width: 25vw;
+    text-align: center;
+}
+
+.container {
+    border: 2px solid black;
+
+}
+
+.copyright {
+    border: 2px solid black;
+    min-height: 10vh;
+}
