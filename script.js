@@ -16,7 +16,7 @@ gridSizes.innerText = slider.value; // Display the default slider value
 // logic to change size of cells in grid
 let squaresPerSide = 16;
 squaresPerSide = parseFloat(slider.value);
-let cellSize = Math.floor(640 / squaresPerSide);
+let cellSize = 640 / squaresPerSide;
 
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
@@ -24,7 +24,7 @@ slider.oninput = function() {
         span.innerText = this.value;
     });
     squaresPerSide = parseFloat(this.value);
-    cellSize = Math.floor(640 / parseFloat(this.value));
+    cellSize = 640 / parseFloat(this.value);
 
     const cellDivs = Array.from(document.getElementsByClassName('cell'));
     console.log(cellDivs.length);
@@ -45,9 +45,6 @@ function updateState (squaresPerSide, cellSize) {
         cell.style.width = `${cellSize}px`;
         cell.style.height = `${cellSize}px`;
         cell.style.flex = `0 0 ${cellSize}px`;
-    
-        // function does not include () because state is switched based on button that is pressed
-        handleMouseSketch;
     
         grid.appendChild(cell);
         
@@ -104,7 +101,7 @@ function handleMouseSketch(event) {
             break;
 
         case 'eraserMode':
-            cell.style.backgroundColor = 'aqua';
+            cell.style.backgroundColor = 'beige';
             break;
     }
 }
@@ -116,8 +113,10 @@ function clearMode() {
     const cells = document.querySelectorAll('.cell');
 
     cells.forEach(cell => {
-            cell.style.backgroundColor = 'aqua';
+            cell.style.backgroundColor = 'beige';
     });
+
+    
 }
 
 
@@ -189,3 +188,9 @@ colorListClose.onclick = () => {
     colorListModal.style.display = 'none';
     //cell.disabled = false;
 }
+
+
+// Initialize the grid when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    updateState(squaresPerSide, cellSize);
+});

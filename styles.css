@@ -146,18 +146,22 @@ body {
 .grid {
     display: flex;
     flex-wrap: wrap;
-    width: 642px;
-    height: 642px;
-    background-color: aqua;
+    width: 646px;
+    height: 646px;
+    background-color: beige;
     padding: 0;
     margin: 0;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    border: 3px solid black;
+    border-radius: 5%;
 }
 
 .cell {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    flex-wrap: wrap;
+    border: none;
 }
 
 .colorListModal {
