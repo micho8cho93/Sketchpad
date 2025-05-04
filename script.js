@@ -1,4 +1,4 @@
-// global variables
+// Global Variables
 const grid = document.querySelector(".grid");
 const rainbowBtn = document.querySelector(".rainbowBtn");
 const opacityBtn = document.querySelector(".opacityBtn");
@@ -8,94 +8,108 @@ const colorInput = document.querySelector(".colorInput");
 const rainbow = ['red', 'blue', 'green', 'yellow', 'orange', 'purple'];
 
 
+// slider
+var slider = document.getElementById("myRange");
+let gridSizes = document.querySelectorAll(".gridSize");
+
+gridSizes.innerText = slider.value; // Display the default slider value
 // logic to change size of cells in grid
 let squaresPerSide = 16;
+squaresPerSide = parseFloat(slider.value);
 let cellSize = Math.floor(640 / squaresPerSide);
 
-
-
-
-for (let i = 0; i < squaresPerSide * squaresPerSide; i++) {
-    var cell = document.createElement('div');
-    cell.classList.add('cell');
-    cell.style.width = `${cellSize}px`;
-    cell.style.height = `${cellSize}px`;
-    cell.style.flex = `0 0 ${cellSize}px`;
-
-    defaultMode();
-
-    grid.appendChild(cell);
-    
-}
-
-//FUNCTIONS
-
-// initiate default mode
-function defaultMode() {
-    const cells = document.querySelectorAll('.cell');
-
-    cells.forEach(cell => { 
-        cell.addEventListener("mouseover", () => {
-            cell.style.backgroundColor = 'black';
-        });
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    gridSizes.forEach(span => {
+        span.innerText = this.value;
     });
+    squaresPerSide = parseFloat(this.value);
+    cellSize = Math.floor(640 / parseFloat(this.value));
+
+    const cellDivs = Array.from(document.getElementsByClassName('cell'));
+    console.log(cellDivs.length);
+    console.log(typeof cellDivs);
+    console.log(cellDivs);
+    
+    cellDivs.forEach(cell => {
+        grid.removeChild(cell);
+    });
+
+    updateState(squaresPerSide, cellSize);
 }
 
-// initiate colorInput mode
-function colorInputMode() {
-    let colorChoice = colorInput.value;
-    const cells = document.querySelectorAll('.cell');
-
-    cells.forEach(cell => {
-        cell.addEventListener("mouseover", () => {
-            cell.style.backgroundColor = colorChoice;
-        })
-    })
-
-    colorInput.value = "";
+function updateState (squaresPerSide, cellSize) {
+    for (let i = 0; i < squaresPerSide * squaresPerSide; i++) {
+        var cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.style.width = `${cellSize}px`;
+        cell.style.height = `${cellSize}px`;
+        cell.style.flex = `0 0 ${cellSize}px`;
+    
+        // function does not include () because state is switched based on button that is pressed
+        handleMouseSketch;
+    
+        grid.appendChild(cell);
+        
+    }
 }
 
-// initiate rainbow mode
-function rainbowMode() {
-    const cells = document.querySelectorAll('.cell');
 
-    cells.forEach(cell => { 
-        cell.addEventListener("mouseover", () => {
-            // randomize color & fill in background
+// Switch Statement & Clear Function
+
+let currentMode = 'default';
+let currentColor = 'black';
+
+grid.addEventListener('mouseover', handleMouseSketch);
+
+function handleMouseSketch(event) {
+    // if selected element is not cell, return and exit function
+    if (!event.target.classList.contains('cell')) return;
+
+
+    // get the cell that was hovered
+    const cell = event.target;
+
+    switch(currentMode) {
+        case 'default':
+            cell.style.backgroundColor = 'black';
+            currentColor = cell.style.backgroundColor;
+            break;
+
+        case 'colorInputMode':
+            cell.style.backgroundColor = colorInput.value;
+            currentColor = cell.style.backgroundColor;
+            break;
+
+        case 'rainbowMode':
             let randomColorIndex = Math.floor(Math.random() * rainbow.length);
             cell.style.backgroundColor = rainbow[randomColorIndex];
-        });
-    });
-}
+            currentColor = 'rainbowMode';
+            break;
 
-// initiate opacity mode
-function opacityMode() {
-    let cells = document.querySelectorAll('.cell');
+        case 'opacityMode':
+            if (currentColor === 'rainbowMode') {
+                let randomColorIndex = Math.floor(Math.random() * rainbow.length);
+                cell.style.backgroundColor = rainbow[randomColorIndex];
+                let currentOpacity = parseFloat(cell.style.opacity) || 0.3;
+                currentOpacity = Math.min(currentOpacity + 0.1, 1);
+                cell.style.opacity = currentOpacity;
+            }
+            else {
+                cell.style.backgroundColor = currentColor;
+                let currentOpacity = parseFloat(cell.style.opacity) || 0.3;
+                currentOpacity = Math.min(currentOpacity + 0.1, 1);
+                cell.style.opacity = currentOpacity;
+            }
+            break;
 
-    cells.forEach(cell => {
-        cell.style.opacity = 0.3;
-    })
-
-    cells.forEach(cell => {
-        cell.addEventListener("mouseover", () => {
-            // increase opacity
-            let currentOpacity = parseFloat(cell.style.opacity) || 0.3;
-            currentOpacity = Math.min(currentOpacity + 0.1, 1);
-            cell.style.opacity = currentOpacity;
-        });
-    });
-}
-
-// initiate eraser 
-function eraserMode() {
-    const cells = document.querySelectorAll('.cell');
-
-    cells.forEach(cell => {
-        cell.addEventListener("mouseover", () => {
+        case 'eraserMode':
             cell.style.backgroundColor = 'aqua';
-        });
-    });
+            break;
+    }
 }
+
+
 
 // initiate clear
 function clearMode() {
@@ -107,34 +121,36 @@ function clearMode() {
 }
 
 
-
-//EVENT LISTENERS
+// Event Listeners
 
 // !!default mode triggered in for loop above!!
 
 // trigger colorInput function
 colorInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
-        colorInputMode();
+        currentMode = 'colorInputMode';
     }
 })
 
 // trigger rainbowMode function
-rainbowBtn.addEventListener("click", rainbowMode);
+rainbowBtn.addEventListener('click', () => currentMode = 'rainbowMode');
 
 // trigger opacityMode function
-opacityBtn.addEventListener("click", opacityMode);
+opacityBtn.addEventListener('click', () => currentMode = 'opacityMode');
 
 // trigger eraser function
-eraserBtn.addEventListener("click", eraserMode);
+eraserBtn.addEventListener('click', () => currentMode = 'eraserMode');
 
 // trigger clear function
-clearBtn.addEventListener("click", clearMode);
+clearBtn.addEventListener('click', clearMode);
 
 
 
-// MODALS
 
+
+// COLOR LIST MODAL
+
+// Global Variables
 const colorListOpen = document.querySelector('.colorListOpen');
 const colorListModal = document.querySelector('.colorListModal');
 const colorList = document.querySelector('.colorList');
@@ -156,6 +172,7 @@ const cssColors = [
     "Yellow", "YellowGreen"
 ];
 
+// Event Listeners & Functions
 colorListOpen.onclick = () => {
     cssColors.forEach(color => {
         const eachColor = document.createElement('div');
@@ -165,10 +182,10 @@ colorListOpen.onclick = () => {
     });
 
     colorListModal.style.display = 'block';
-    cell.disabled = true;
+    //cell.disabled = true;
 }
 
 colorListClose.onclick = () => {
     colorListModal.style.display = 'none';
-    cell.disabled = false;
+    //cell.disabled = false;
 }

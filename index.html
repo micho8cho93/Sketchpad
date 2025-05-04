@@ -10,11 +10,15 @@
 </head>
 <body class="has-background-primary-80">
     <section class="title" id="title">
-        <h1>SketchPad</h1>
+        <h1 class="mainTitle">SketchPad</h1>
     </section>
     <section class="main">
         <div class="sidebar" id="sidebar">
-            <h2>Controls</h2>
+            <h2 class="controlTitle">Controls</h2>
+            <div class="slidecontainer">
+                <input type="range" min="1" max="100" value="16" class="slider" id="myRange">
+                <p>Grid size: <span class="gridSize">16</span>x<span class="gridSize">16</span></p>
+            </div>
             <input class="colorInput" placeholder="Enter a color (i.e. blue)">
             <button class="colorListOpen button-30" id="colorListOpen">Color List</button>
             <div class="colorListModal" id="colorListModal">
